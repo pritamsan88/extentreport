@@ -7,12 +7,18 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 public class TwgExtentReport {
 
@@ -51,30 +57,57 @@ public class TwgExtentReport {
 
     @Test
     public void login() {
-        test.log(Status.INFO,"This is test log message ");
-        page=new pagefactory(driver);
+        test.log(Status.INFO, "This is test log message ");
+        page = new pagefactory(driver);
         page.openurl();
+
+        ArrayList<String[]> logincredentials = new ArrayList<>();
+        logincredentials.add(new String[]{"pritam.sanyal@yopmail.com", "Sanyal88888@@"});
+
+
+        for (String[] ele : logincredentials) {
+            String usernamefield=ele[0];
+            String passwordfield=ele[1];
+
+            page.username(usernamefield);
+            page.password(passwordfield);
+            page.loginbutton();
+            page.verifydashboard();
+            page.logout();
+        }
     }
 
     @AfterMethod
-    public void getresult(ITestResult result)
-    {
-        if(result.getStatus()== ITestResult.FAILURE)
-        {
-            test.log(Status.FAIL,result.getThrowable());
+    public void getresult(ITestResult result) {
+        if (result.getStatus() == ITestResult.FAILURE) {
 
-        } else if (result.getStatus()==ITestResult.SUCCESS) {
-            test.log(Status.PASS,result.getThrowable());
+            test.log(Status.FAIL, result.getThrowable());
+            String screenshotPath = capturescreenshot(result.getName());
+            test.addScreenCaptureFromPath(screenshotPath, "Failed Screenshot");
 
-        }
-        else
-        {
-         test.log(Status.SKIP,result.getThrowable());
+        } else if (result.getStatus() == ITestResult.SUCCESS) {
+            test.log(Status.PASS, result.getThrowable());
 
-        }
-        {
+        } else {
+            test.log(Status.SKIP, result.getThrowable());
 
         }
+
+    }
+
+    public String capturescreenshot(String screenshotname) {
+
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        File src = ts.getScreenshotAs(OutputType.FILE);
+        String dest = System.getProperty("user.dir") + "/test-output/extentReport.html" + screenshotname + ".jpeg";
+
+        File fl = new File(dest);
+        try {
+            FileUtils.copyFile(src, fl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dest;
 
     }
 
