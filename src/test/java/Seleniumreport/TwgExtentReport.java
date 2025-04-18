@@ -18,6 +18,7 @@ import org.testng.annotations.*;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.time.Duration;
 import java.util.ArrayList;
 
 public class TwgExtentReport {
@@ -27,6 +28,7 @@ public class TwgExtentReport {
     ExtentReports extent;
     ExtentTest test;
     pagefactory page;
+    ArrayList<String[]> logincredentials;
 
     @BeforeClass
     public void reportsetup() {
@@ -38,6 +40,7 @@ public class TwgExtentReport {
         htmlreporter.config().setTheme(Theme.DARK);
         htmlreporter.config().setReportName("TWg Automation Functionality");
         htmlreporter.config().setTimeStampFormat("EEEE, MMMM dd, yyyy, hh:mm a '('zzz')'");
+
     }
 
     @BeforeTest
@@ -55,27 +58,46 @@ public class TwgExtentReport {
         test = extent.createTest(method.getName());
     }
 
+    /*@DataProvider(name = "logincredentials")
+    public Object[][] logindetails() {
+        return new Object[][]{{"pritam.sanyal@yopmail.com", "Sanyal88888@@"}, {"smith_doe@yopmail.com", "Testing$$$123"}};
+
+    }*/
+
     @Test
-    public void login() {
-        test.log(Status.INFO, "This is test log message ");
+
+    public void logintest() throws InterruptedException {
+        test.log(Status.INFO, "Start test login  ");
         page = new pagefactory(driver);
         page.openurl();
 
-        ArrayList<String[]> logincredentials = new ArrayList<>();
+        logincredentials = new ArrayList<>();
         logincredentials.add(new String[]{"pritam.sanyal@yopmail.com", "Sanyal88888@@"});
-
+        // logincredentials.add(new String[]{"smith_doe@yopmail.com", "Testing$$$123"});
 
         for (String[] ele : logincredentials) {
-            String usernamefield=ele[0];
-            String passwordfield=ele[1];
+            String usernamefield = ele[0];
+            String passwordfield = ele[1];
 
             page.username(usernamefield);
             page.password(passwordfield);
             page.loginbutton();
+            test.log(Status.INFO, "verify dashboard");
             page.verifydashboard();
+            test.log(Status.INFO, "Home page");
+            // page.homepage();
+            test.log(Status.INFO, "Subscribe page");
+            page.newsubcription();
+
+            test.log(Status.INFO, "My account ");
+            page.myaccount();
+            test.log(Status.INFO, "Logout functionality");
             page.logout();
+
+
         }
     }
+
 
     @AfterMethod
     public void getresult(ITestResult result) {
@@ -114,7 +136,8 @@ public class TwgExtentReport {
     @AfterTest
     public void quit() throws InterruptedException {
 
-        Thread.sleep(2000);
+        Thread.sleep(40000);
+
         driver.quit();
     }
 
@@ -126,3 +149,5 @@ public class TwgExtentReport {
     }
 
 }
+
+

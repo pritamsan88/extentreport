@@ -5,13 +5,19 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.ArrayList;
+import java.time.Duration;
+import java.util.*;
 
 public class pagefactory {
 
     WebDriver driver = null;
     JavascriptExecutor js = null;
+    Random ran;
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     @FindBy(id = "username")
     WebElement usernamefield;
 
@@ -27,7 +33,35 @@ public class pagefactory {
     @FindBy(xpath = "//a[contains(text(),'Log out')]")
     WebElement logout1;
 
+    @FindBy(xpath = "//a[contains(text(),'Home')]")
+    WebElement homepage;
+
+    @FindBy(xpath = "//a/span[contains(text(),'Subscribe Now')]")
+    WebElement subscribe;
+    @FindBy(xpath = "//a[@href='https://thosewoofguys.com/my-account/']")
+    WebElement myaccount1;
+    @FindBy(id = "subs_pack")
+    WebElement SubscriptionPlan;
+    @FindBy(xpath = "//input[@type='radio']")
+    List<WebElement> dogprofile;
+
+    @FindBy(css = "h2.ordr_prdct")
+    List<WebElement> subsorderpuct;
+
+
+    @FindBy(css = "input.ordr_input")
+    List<WebElement> subsorderpuctinput;
+
+    @FindBy(xpath = "//a[@class='carts_btn not_match_limit_cart']")
+    WebElement subscriptioncart;
+
+
+    @FindBy(xpath = "//a[@href='javascript:void(0);']")
+    WebElement popupconfirm;
+
+
     String url = "https://thosewoofguys.com/my-account/";
+    String subscribepage = "https://thosewoofguys.com/subscriptions/";
 
     public pagefactory(WebDriver driver) {
         this.driver = driver;
@@ -72,4 +106,67 @@ public class pagefactory {
     }
 
 
+    public void myaccount() throws InterruptedException {
+        Thread.sleep(2000);
+        js.executeScript("arguments[0].scrollIntoView();", myaccount1);
+        js.executeScript("arguments[0].click();", myaccount1);
+
+
+    }
+
+
+    public void newsubcription() throws InterruptedException {
+        driver.navigate().to(subscribepage);
+        js.executeScript("arguments[0].scrollIntoView();", SubscriptionPlan);
+        Select dropdown = new Select(SubscriptionPlan);
+        dropdown.selectByIndex(2);
+
+        ran = new Random();
+        int randomindex = ran.nextInt(dogprofile.size());
+
+        WebElement pupprofile = dogprofile.get(randomindex);
+
+        js.executeScript("arguments[0].click();", pupprofile);
+        System.out.println(" Clicked random dog profile index: " + randomindex);
+        Thread.sleep(300);
+        for (int i = 0; i < subsorderpuct.size(); i++) {
+            WebElement product = subsorderpuct.get(i);
+            WebElement quantityinput = subsorderpuctinput.get(i);
+            Thread.sleep(1000);
+            js.executeScript("arguments[0].scrollIntoView(true);", product);
+            quantityinput.clear();
+            //String numberofquantity = quantity.get(i);
+            //quantityinput.sendKeys(numberofquantity);
+            quantityinput.sendKeys("10");
+
+            String productname = product.getText().trim();
+            String inputquantity = quantityinput.getAttribute("value");
+            System.out.println("Selected product: " + productname + " | Quantity: " + inputquantity);
+            // js.executeScript("arguments[0].click();", subscriptioncart);
+
+
+        }
+        Thread.sleep(500);
+
+
+        // Scroll and click subscription cart
+        js.executeScript("arguments[0].scrollIntoView(true);", subscriptioncart);
+        Thread.sleep(500);
+        js.executeScript("arguments[0].click();", subscriptioncart);
+        //Thread.sleep(5000);
+        Set<String> windowsIs = driver.getWindowHandles();
+        System.out.print(windowsIs);
+        Thread.sleep(500);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(ExpectedConditions.elementToBeClickable(popupconfirm));
+        js.executeScript("arguments[0].click();", popupconfirm);
+
+        //driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(5));
+
+
+    }
+
 }
+
+
+
