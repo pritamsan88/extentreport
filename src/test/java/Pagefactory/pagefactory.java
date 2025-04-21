@@ -56,7 +56,7 @@ public class pagefactory {
     WebElement subscriptioncart;
 
 
-    @FindBy(xpath = "//a[@href='javascript:void(0);']")
+    @FindBy(css = " div.site_btn_wppr > a")
     WebElement popupconfirm;
 
 
@@ -156,13 +156,60 @@ public class pagefactory {
         //Thread.sleep(5000);
         Set<String> windowsIs = driver.getWindowHandles();
         System.out.print(windowsIs);
-        Thread.sleep(500);
+        Thread.sleep(1000);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(ExpectedConditions.elementToBeClickable(popupconfirm));
+        // driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(5));
         js.executeScript("arguments[0].click();", popupconfirm);
 
-        //driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(5));
 
+    }
+
+    public void dyanamicsubscription() throws InterruptedException {
+        driver.navigate().to(subscribepage);
+        js.executeScript("arguments[0].scrollIntoView();", SubscriptionPlan);
+        Select dropdown = new Select(SubscriptionPlan);
+        dropdown.selectByIndex(2);
+        ran = new Random();
+        int randomindex = ran.nextInt(dogprofile.size());
+        WebElement pupprofile = dogprofile.get(randomindex);
+        js.executeScript("arguments[0].click();", pupprofile);
+        System.out.println(" Clicked random dog profile index: " + randomindex);
+        Thread.sleep(300);
+
+        List<String> pricetag = Arrays.asList("20", "0", "20","0","20");
+
+            //throw new IllegalStateException("List sizes do not match!");
+            for (int i = 0; i < subsorderpuct.size(); i++) {
+                WebElement product = subsorderpuct.get(i);
+                WebElement quantityinput = subsorderpuctinput.get(i);
+                String ele = pricetag.get(i);
+                Thread.sleep(1000);
+                js.executeScript("arguments[0].scrollIntoView(true);", product);
+                quantityinput.clear();
+                quantityinput.sendKeys(ele);
+                String productname = product.getText().trim();
+                String inputquantity = quantityinput.getAttribute("value");
+                System.out.println("Selected product: " + productname + " | Quantity: " + inputquantity);
+
+
+            }
+
+
+        Thread.sleep(500);
+
+
+        // Scroll and click subscription cart
+        js.executeScript("arguments[0].scrollIntoView(true);", subscriptioncart);
+        Thread.sleep(500);
+        js.executeScript("arguments[0].click();", subscriptioncart);
+        Set<String> windowsIs = driver.getWindowHandles();
+        System.out.print(windowsIs);
+        Thread.sleep(1000);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+        wait.until(ExpectedConditions.elementToBeClickable(popupconfirm));
+        // driver.manage().timeouts().pageLoadTimeout(Duration.ofMinutes(5));
+        js.executeScript("arguments[0].click();", popupconfirm);
 
     }
 

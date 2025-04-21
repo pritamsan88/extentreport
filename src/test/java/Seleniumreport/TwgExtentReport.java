@@ -72,8 +72,8 @@ public class TwgExtentReport {
         page.openurl();
 
         logincredentials = new ArrayList<>();
-        logincredentials.add(new String[]{"pritam.sanyal@yopmail.com", "Sanyal88888@@"});
-        // logincredentials.add(new String[]{"smith_doe@yopmail.com", "Testing$$$123"});
+        //logincredentials.add(new String[]{"pritam.sanyal@yopmail.com", "Sanyal88888@@"});
+        logincredentials.add(new String[]{"smith_doe@yopmail.com", "Testing$$$123"});
 
         for (String[] ele : logincredentials) {
             String usernamefield = ele[0];
@@ -87,7 +87,8 @@ public class TwgExtentReport {
             test.log(Status.INFO, "Home page");
             // page.homepage();
             test.log(Status.INFO, "Subscribe page");
-            page.newsubcription();
+            //page.newsubcription();
+            page.dyanamicsubscription();
 
             test.log(Status.INFO, "My account ");
             page.myaccount();
@@ -136,7 +137,7 @@ public class TwgExtentReport {
     @AfterTest
     public void quit() throws InterruptedException {
 
-        Thread.sleep(40000);
+        Thread.sleep(30000);
 
         driver.quit();
     }
