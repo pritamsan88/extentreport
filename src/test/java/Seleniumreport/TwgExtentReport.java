@@ -86,9 +86,13 @@ public class TwgExtentReport {
             page.verifydashboard();
             test.log(Status.INFO, "Home page");
             // page.homepage();
-            test.log(Status.INFO, "Subscribe page");
+            test.log(Status.INFO, "Subscribe page & subscribe operation");
             //page.newsubcription();
             page.dyanamicsubscription();
+            test.log(Status.INFO, "Delete item in cart section");
+            page.deleteitem();
+            test.log(Status.INFO, "validated empty cart after delete");
+            page.emptycartvalidate();
 
             test.log(Status.INFO, "My account ");
             page.myaccount();
@@ -137,7 +141,7 @@ public class TwgExtentReport {
     @AfterTest
     public void quit() throws InterruptedException {
 
-        Thread.sleep(8000);
+        Thread.sleep(5000);
 
         driver.quit();
     }

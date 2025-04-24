@@ -67,6 +67,10 @@ public class pagefactory {
     List<WebElement> breakdownheader;
     @FindBy(xpath = "//tbody[@id='cart-items-table']/tr/td")
     List<WebElement> breakdowncontent;
+    @FindBy(css = " button.wc-block-cart-item__remove-link")
+    List<WebElement> cartitemdelete;
+    @FindBy(css = "div .wp-block-woocommerce-empty-cart-block> h2")
+    WebElement emptycartalert;
 
 
     String url = "https://thosewoofguys.com/my-account/";
@@ -240,9 +244,6 @@ public class pagefactory {
         System.out.println(build.toString());
 
 
-
-
-
         Thread.sleep(1000);
 
 
@@ -250,6 +251,26 @@ public class pagefactory {
         js.executeScript("arguments[0].click();", viewbreakdownclosebutton);
 
 
+    }
+
+    public void deleteitem() throws InterruptedException {
+        for (WebElement delete : cartitemdelete) {
+            // delete.click();
+            js.executeScript("arguments[0].scrollIntoView();", delete);
+            Thread.sleep(2000);
+            js.executeScript("arguments[0].click();", delete);
+            Thread.sleep(1000);
+        }
+
+    }
+
+    public void emptycartvalidate() {
+        String expectedemptyalert = "Your cart is currently empty!";
+        if (emptycartalert.isDisplayed() && emptycartalert.getText().equalsIgnoreCase(expectedemptyalert)) {
+            System.out.println("Cart is empty and message is validated.");
+        } else {
+            System.out.println("Cart is not empty or message did not match.");
+        }
     }
 
 }
