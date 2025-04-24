@@ -137,7 +137,7 @@ public class TwgExtentReport {
     @AfterTest
     public void quit() throws InterruptedException {
 
-        Thread.sleep(30000);
+        Thread.sleep(8000);
 
         driver.quit();
     }
