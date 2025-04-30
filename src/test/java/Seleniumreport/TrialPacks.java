@@ -55,7 +55,7 @@ public class TrialPacks {
 
     @AfterTest
     public void quit() throws InterruptedException {
-        Thread.sleep(4000);
+        Thread.sleep(5000);
         driver.quit();
 
     }
