@@ -33,7 +33,7 @@ public class TrialPacks {
         page.trialpackageoperate();
         Thread.sleep(2000);
 
-        ArrayList<String[]> credentials = new ArrayList<>();
+      List<String[]> credentials = new ArrayList<>();
         credentials.add(new String[]{"smith_doe@yopmail.com", "Testing$$$123"});
 
         for (String[] ele : credentials) {

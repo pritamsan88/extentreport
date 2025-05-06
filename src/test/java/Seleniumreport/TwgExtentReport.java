@@ -126,7 +126,7 @@ public class TwgExtentReport {
 
         TakesScreenshot ts = (TakesScreenshot) driver;
         File src = ts.getScreenshotAs(OutputType.FILE);
-        String dest = System.getProperty("user.dir") + "/test-output/extentReport.html" + screenshotname + ".jpeg";
+        String dest = System.getProperty("user.dir") + "/test-output/extentReport1.html" + screenshotname + ".jpeg";
 
         File fl = new File(dest);
         try {
