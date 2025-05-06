@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Twg Automation ">
+    <test verbose="2" preserve-order="true" name="C:/Users/ETPL-DTP-020/IdeaProjects/Extentreport">
+        <classes>
+            <class name="Seleniumreport.methodoveriddingchild">
+                <methods>
+                    <include name="trialpack"/>
+                </methods>
+            </class>
+
+            <class name="Seleniumreport.TwgExtentReport">
+                <methods>
+                    <include name="logintest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+</suite>
